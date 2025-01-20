@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Fade-in Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--background);
+                padding: 1rem;
+                text-align: center;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                opacity: 0;
+                transform: translateY(-10px);
+                transition: opacity 0.4s ease, transform 0.4s ease;
+            }
+
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Section Animation */
+        .hero {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Blog Cards Animation */
+        .post-card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1.2s ease-in-out forwards;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Blog Card Hover Effect */
+        .post-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Footer Animation */
+        .footer {
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
+        }
+    </style>
+  <link rel="stylesheet" crossorigin href="/assets/index-SKThfe_P.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">3Z0</div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/pages/blog.html">Blog</a></li>
+                <li><a href="/pages/about.html">About</a></li>
+                <li><a href="/pages/contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Welcome to 3Z0</h1>
+            <p>Explore our collection of thoughtful articles and insights</p>
+            <a href="/pages/blog.html" class="cta-button">Read Latest Posts</a>
+        </div>
+    </header>
+
+    <main class="featured-posts">
+        <h2>Featured Posts</h2>
+        <div class="posts-grid">
+            <article class="post-card">
+                <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1499750310107-5fef28a66643')"></div>
+                <div class="post-content">
+                    <span class="category">Technology</span>
+                    <h3>The Future of Web Development</h3>
+                    <p>Exploring the latest trends and technologies shaping the web development landscape.</p>
+                    <a href="/blogs/1.html" class="read-more">Read More</a>
+                </div>
+            </article>
+            <article class="post-card">
+                <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1516542076529-1ea3854896f2')"></div>
+                <div class="post-content">
+                    <span class="category">Design</span>
+                    <h3>Minimalist Design Principles</h3>
+                    <p>Understanding the core principles of minimalist design and its impact.</p>
+                    <a href="/blogs/2.html" class="read-more">Read More</a>
+                </div>
+            </article>
+            <article class="post-card">
+                <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e')"></div>
+                <div class="post-content">
+                    <span class="category">Productivity</span>
+                    <h3>Mastering Time Management</h3>
+                    <p>Essential strategies for better productivity and work-life balance.</p>
+                    <a href="/blogs/3.html" class="read-more">Read More</a>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About 3Z0</h4>
+                <p>A modern platform for sharing ideas, knowledge, and experiences.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/pages/blog.html">Blog</a></li>
+                    <li><a href="/pages/about.html">About</a></li>
+                    <li><a href="/pages/contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 3Z0. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const menuToggle = document.querySelector(".menu-toggle");
+            const navLinks = document.querySelector(".nav-links");
+
+            menuToggle.addEventListener("click", function () {
+                navLinks.classList.toggle("active");
+            });
+        });
+    </script>
+</body>
+</html>
