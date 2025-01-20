@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Evolution of Web Development - 3Z0</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Hero Image Section */
+        .hero-container {
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Blog Post Content Box */
+        .blog-post-content {
+            max-width: 900px;
+            margin: -80px auto 40px; /* Adjusted margin to overlap hero image */
+            padding: 20px;
+            background: var(--light-background);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .blog-post-content h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .blog-post-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+
+        .blog-post-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            font-style: italic;
+            background: var(--border-color);
+            margin: 20px 0;
+        }
+
+        .post-meta {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-bottom: 20px;
+        }
+
+        .callout {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            margin: 20px 0;
+        }
+
+        .related-posts {
+            margin-top: 40px;
+        }
+
+        .related-posts h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .related-posts ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .related-posts ul li {
+            margin-bottom: 10px;
+        }
+
+        .related-posts ul li a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .related-posts ul li a:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">3Z0</div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/pages/blog.html">Blog</a></li> 
+                <li><a href="/pages/about.html">About</a></li>
+                <li><a href="/pages/contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Image -->
+    <div class="hero-container">
+        <img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e" alt="Web Development Evolution" class="hero-image">
+    </div>
+
+    <!-- Blog Post Content -->
+    <main class="blog-post-content">
+        <h1>The Evolution of Web Development</h1>
+        <p class="post-meta">Published on <strong>January 14th, 2025</strong> at <strong>4:35pm</strong> by <strong>Charlie</strong>.</p>
+
+        <p>Web development has undergone a massive transformation over the years. From simple text-based websites to dynamic applications powered by artificial intelligence, the journey has been incredible.</p>
+
+        <h2>The Early Days</h2>
+        <p>Back in the 1990s, the internet was a new and unexplored space. Websites were mostly text-heavy, using basic **HTML** and very limited styling through **CSS**.</p>
+
+        <blockquote>"The web is not just about technology; it’s about making human connections." - Tim Berners-Lee</blockquote>
+
+        <p>Static websites dominated the web, with tools like **GeoCities** and **FrontPage** allowing users to create simple pages. JavaScript was introduced in 1995, paving the way for interactive elements.</p>
+
+        <h2>The Rise of JavaScript Frameworks</h2>
+        <p>By the 2000s, JavaScript gained popularity, and libraries like jQuery made scripting easier. However, it was the introduction of **React, Angular, and Vue.js** that truly changed web development.</p>
+
+        <div class="callout">
+            💡 Did you know? The first website ever created is still live! Check out <a href="http://info.cern.ch" target="_blank" style="color:white; text-decoration:underline;">Tim Berners-Lee's original website</a>.
+        </div>
+
+        <h2>The Modern Web</h2>
+        <p>Today, web applications are built with cutting-edge technologies like **Node.js, TypeScript, and AI-driven development**. The rise of **PWAs (Progressive Web Apps)** has further blurred the lines between websites and native apps.</p>
+
+        <h2>What’s Next?</h2>
+        <p>The future of web development lies in **Web3, AI-assisted coding, and immersive 3D experiences**. As the industry continues to evolve, one thing remains constant: the web will always be a place of innovation.</p>
+
+        <!-- Related Posts -->
+        <div class="related-posts">
+            <h3>Related Articles</h3>
+            <ul>
+                <li><a href="#">Why Dark Mode is Taking Over UI Design</a></li>
+                <li><a href="#">Top JavaScript Frameworks in 2025</a></li>
+                <li><a href="#">The Role of AI in Web Development</a></li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About 3Z0</h4>
+                <p>A modern platform for sharing ideas, knowledge, and experiences.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/pages/blog.html">Blog</a></li>
+                    <li><a href="/pages/about.html">About</a></li>
+                    <li><a href="/pages/contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <div class="social-links">
+                    <a href="https://solo.to/zeitgeist" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <a href="https://x.com/n35b" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@n35b" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://www.instagram.com/bi_t" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@combs" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 3Z0. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
