@@ -161,12 +161,13 @@ body {
 
 .category {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background-color: var(--light-background);
-    color: var(--primary-color);
-    border-radius: 1rem;
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
+    padding: 5px 10px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    transition: transform 0.2s ease;
 }
 
 .post-content h3 {
