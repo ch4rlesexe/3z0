@@ -1,10 +1,8 @@
 {
-  "rewrites": [
-    { "source": "/:name", "destination": "/pages/:name.html" },
-    { "source": "/blogs/:name", "destination": "/blogs/:name.html" }
-  ],
-  "redirects": [
-    { "source": "/pages/:name", "destination": "/:name", "permanent": true }
-  ],
-  "cleanUrls": true
-}
+    "rewrites": [
+      { "source": "/:name", "destination": "/pages/:name.html" },
+      { "source": "/blogs/:name", "destination": "/blogs/:name.html" }
+    ],
+    "cleanUrls": true
+  }
+  
