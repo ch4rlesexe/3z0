@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/:name", "destination": "/pages/:name.html" },
+    { "source": "/blogs/:name", "destination": "/blogs/:name.html" }
+  ],
+  "cleanUrls": true
+}
