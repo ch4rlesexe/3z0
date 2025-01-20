@@ -1,12 +1,14 @@
 {
-  "name": "3z0",
-  "version": "1.0.0",
+  "name": "3Z0",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "vite preview"
+    "preview": "vite preview"
   },
-  "dependencies": {
-    "vite": "^4.0.0"
+  "devDependencies": {
+    "vite": "^5.4.2"
   }
 }
