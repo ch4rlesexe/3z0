@@ -17,9 +17,8 @@ This is a standalone blog site that provides a minimalistic and modern layout fo
 - **Enable post reactions** so users can engage with content.
 - **Show dates and authors** on blog post cards.
 - **Increase the number of posts** for better engagement and content variety.
-- **Multi Theme** for more customizability
-- **Local Images** for faster loading
-- **Add More** featured posts
+- **Multi Theme** for more customizability.
+- **Local Images** for faster loading.
 
 ## Notes
 This project is ideal for those who want full control over their blog’s design without relying on CMS platforms. However, it does require manual coding and management.
