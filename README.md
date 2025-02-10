@@ -24,3 +24,5 @@ This is a standalone blog site that provides a minimalistic and modern layout fo
 This project is ideal for those who want full control over their blog’s design without relying on CMS platforms. However, it does require manual coding and management.
 
 ---
+
+Also attached my www.3z0.org.conf if you are using nginx, or if you are using vercel stick with vercel.json
