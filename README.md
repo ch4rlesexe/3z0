@@ -19,6 +19,7 @@ This is a standalone blog site that provides a minimalistic and modern layout fo
 - **Increase the number of posts** for better engagement and content variety.
 - **Multi Theme** for more customizability.
 - **Local Images** for faster loading.
+- **Improve** mobile view.
 
 ## Notes
 This project is ideal for those who want full control over their blog’s design without relying on CMS platforms. However, it does require manual coding and management.
