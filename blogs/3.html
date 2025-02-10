@@ -36,9 +36,9 @@
             <div class="logo">3Z0</div>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
-                <li><a href="/pages/blog.html">Blog</a></li>
-                <li><a href="/pages/about.html">About</a></li>
-                <li><a href="/pages/contact.html">Contact</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
             </ul>
         </div>
     </nav>
@@ -104,49 +104,17 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>About 3Z0</h4>
-                <p>A modern platform for sharing ideas, knowledge, and experiences.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/pages/blog.html">Blog</a></li>
-                    <li><a href="/pages/about.html">About</a></li>
-                    <li><a href="/pages/contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Connect</h4>
-                <div class="social-links">
-                    <a href="https://3z0.org" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="https://x.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-tiktok"></i>
-                    </a>
-                    <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-discord"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 3Z0. All rights reserved.</p>
-        </div>
-    </footer>
+<div id="footer-container"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('/styling/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    });
+  </script>
 </body>
 </html>

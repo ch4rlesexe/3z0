@@ -153,24 +153,11 @@
         transform: translateY(0);
     }
 }
-
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="logo">3Z0</div>
-            <div class="menu-toggle">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/blog.html" class="active">Blog</a></li>
-                <li><a href="/about.html">About</a></li>
-                <li><a href="/contact.html">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+
+    <div id="navbar-container"></div>
 
     <header class="page-header">
         <h1>Our Blog</h1>
@@ -192,121 +179,95 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>About 3Z0</h4>
-                <p>A modern platform for sharing ideas, knowledge, and experiences.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/blog.html">Blog</a></li>
-                    <li><a href="/about.html">About</a></li>
-                    <li><a href="/contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Connect</h4>
-                <div class="social-links">
-                    <a href="https://3z0.org" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="https://x.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-tiktok"></i>
-                    </a>
-                    <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-discord"></i>
-                    </a>
-                </div>
-            </div>
-            
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 3Z0. All rights reserved.</p>
-        </div>
-    </footer>
+    <div id="footer-container"></div>
 
     <script>
-// Hamburger Menu Toggle
-document.addEventListener("DOMContentLoaded", function () {
-    const menuToggle = document.querySelector(".menu-toggle");
-    const navLinks = document.querySelector(".nav-links");
-
-    menuToggle.addEventListener("click", function () {
-        navLinks.classList.toggle("active");
-    });
-});
-
-// Blog Posts Data
-const blogPosts = [
-    { id: 1, title: 'The Future of Web Development', category: 'Technology', image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643', excerpt: 'Exploring the latest trends and technologies shaping the web.', url: '/blogs/1.html' },
-    { id: 2, title: 'Minimalist Design Principles', category: 'Design', image: 'https://images.unsplash.com/photo-1516542076529-1ea3854896f2', excerpt: 'Understanding the core principles of minimalist design.', url: '/blogs/2.html' },
-    //{ id: 3, title: 'Mastering Time Management', category: 'Productivity', image: 'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e', excerpt: 'Essential strategies for better productivity.', url: '/blogs/3.html' },
-    //{ id: 4, title: 'AI in Web Development', category: 'Technology', image: 'https://images.unsplash.com/photo-1581093458791-ff5bb38c8a24', excerpt: 'How AI is changing the future of coding.', url: '/blogs/4.html' },
-    //{ id: 5, title: 'Color Theory in UI Design', category: 'Design', image: 'https://images.unsplash.com/photo-1494314671902-399b18174975', excerpt: 'How colors influence user perception.', url: '/blogs/5.html' },
-    //{ id: 6, title: 'Building Better Habits', category: 'Productivity', image: 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0', excerpt: 'The science behind forming habits.', url: '/blogs/6.html' },
-    { id: 7, title: 'Positivity Gambling', category: 'Finance', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpC1Fqff_cR1Gc9k9Sdqf024cYoD-H6LufLg&s', excerpt: 'Play more, win big.', url: '/blogs/7.html' }
-
-];
-
-const blogGrid = document.querySelector('.blog-grid');
-const filterButtons = document.querySelectorAll('.filter-btn');
-
-// Function to display blog posts
-function displayPosts(category) {
-    blogGrid.innerHTML = ''; // Clear previous posts
-
-    const filteredPosts = category === 'all' ? blogPosts : blogPosts.filter(post => post.category === category);
-
-    if (filteredPosts.length === 0) {
-        blogGrid.innerHTML = '<p style="text-align: center; font-size: 1.2rem; color: var(--light-text);">No posts available.</p>';
-        return;
+    function loadComponent(containerId, filePath) {
+        fetch(filePath)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById(containerId).innerHTML = html;
+                
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('#navbar-container .nav-links a').forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            })
+            .catch(error => console.error(`Error loading ${filePath}:`, error));
     }
 
-    filteredPosts.forEach(post => {
-        const postCard = document.createElement('article');
-        postCard.classList.add('post-card');
-        postCard.setAttribute('data-category', post.category);
-        postCard.innerHTML = `
-            <div class="post-image" style="background-image: url('${post.image}')"></div>
-            <div class="post-content">
-                <span class="category">${post.category}</span>
-                <h3 class="post-title">${post.title}</h3>
-                <p>${post.excerpt}</p>
-                <a href="${post.url}" class="read-more">Read More</a>
-            </div>
-        `;
-
-        blogGrid.appendChild(postCard);
-        postCard.style.animationDelay = `${Math.random() * 0.5}s`; // Stagger animation
-    });
-}
-
-// Load all posts when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    displayPosts('all');
-
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            displayPosts(button.getAttribute('data-category'));
+        document.addEventListener("DOMContentLoaded", function () {
+            loadComponent('navbar-container', '/styling/navbar.html');
+            loadComponent('footer-container', '/styling/footer.html');
         });
-    });
-});
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.addEventListener("click", function (event) {
+                if (event.target.closest(".menu-toggle")) {
+                    const navLinks = document.querySelector(".nav-links");
+                    if (navLinks) navLinks.classList.toggle("active");
+                }
+            });
+        });
+
+        // Blog Posts Data
+        const blogPosts = [
+            { id: 1, title: 'The Future of Web Development', category: 'Technology', image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643', excerpt: 'Exploring the latest trends and technologies shaping the web.', url: '/blogs/1' },
+            { id: 2, title: 'Minimalist Design Principles', category: 'Design', image: 'https://images.unsplash.com/photo-1516542076529-1ea3854896f2', excerpt: 'Understanding the core principles of minimalist design.', url: '/blogs/2' },
+            { id: 7, title: 'Positivity Gambling', category: 'Finance', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpC1Fqff_cR1Gc9k9Sdqf024cYoD-H6LufLg&s', excerpt: 'Play more, win big.', url: '/blogs/7' }
+        ];
+
+        const blogGrid = document.querySelector('.blog-grid');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        // Function to display blog posts
+        function displayPosts(category) {
+            blogGrid.innerHTML = ''; // Clear previous posts
+
+            const filteredPosts = category === 'all' ? blogPosts : blogPosts.filter(post => post.category === category);
+
+            if (filteredPosts.length === 0) {
+                blogGrid.innerHTML = '<p style="text-align: center; font-size: 1.2rem; color: var(--light-text);">No posts available.</p>';
+                return;
+            }
+
+            filteredPosts.forEach(post => {
+                const postCard = document.createElement('article');
+                postCard.classList.add('post-card');
+                postCard.setAttribute('data-category', post.category);
+                postCard.innerHTML = `
+                    <div class="post-image" style="background-image: url('${post.image}')"></div>
+                    <div class="post-content">
+                        <span class="category">${post.category}</span>
+                        <h3 class="post-title">${post.title}</h3>
+                        <p>${post.excerpt}</p>
+                        <a href="${post.url}" class="read-more">Read More</a>
+                    </div>
+                `;
+
+                blogGrid.appendChild(postCard);
+                postCard.style.animationDelay = `${Math.random() * 0.5}s`; // Stagger animation
+            });
+        }
+
+        // Load all posts when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            displayPosts('all');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    displayPosts(button.getAttribute('data-category'));
+                });
+            });
+        });
 
     </script>
+
 </body>
 </html>

@@ -133,20 +133,8 @@ input:focus, textarea:focus {
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="logo">3Z0</div>
-            <div class="menu-toggle">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/blog.html">Blog</a></li>
-                <li><a href="/about.html">About</a></li>
-                <li><a href="/contact.html" class="active">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+
+    <div id="navbar-container"></div>
 
     <header class="page-header">
         <h1>Contact Us</h1>
@@ -200,59 +188,39 @@ input:focus, textarea:focus {
         <button onclick="closePopup()">Close</button>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>About 3Z0</h4>
-                <p>A modern platform for sharing ideas, knowledge, and experiences.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/blog.html">Blog</a></li>
-                    <li><a href="/about.html">About</a></li>
-                    <li><a href="/contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Connect</h4>
-                <div class="social-links">
-                    <a href="https://3z0.org" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="https://x.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-tiktok"></i>
-                    </a>
-                    <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-discord"></i>
-                    </a>
-                </div>
-            </div>
-            
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 3Z0. All rights reserved.</p>
-        </div>
-    </footer>
+  <div id="footer-container"></div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const menuToggle = document.querySelector(".menu-toggle");
-            const navLinks = document.querySelector(".nav-links");
+    function loadComponent(containerId, filePath) {
+        fetch(filePath)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById(containerId).innerHTML = html;
+                
+                // Set Active Class Dynamically Based on Current Page
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('#navbar-container .nav-links a').forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            })
+            .catch(error => console.error(`Error loading ${filePath}:`, error));
+    }
 
-            menuToggle.addEventListener("click", function () {
-                navLinks.classList.toggle("active");
+        document.addEventListener("DOMContentLoaded", function () {
+            loadComponent('navbar-container', '/styling/navbar.html');
+            loadComponent('footer-container', '/styling/footer.html');
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.addEventListener("click", function (event) {
+                if (event.target.closest(".menu-toggle")) {
+                    const navLinks = document.querySelector(".nav-links");
+                    if (navLinks) navLinks.classList.toggle("active");
+                }
             });
         });
 
@@ -279,5 +247,6 @@ input:focus, textarea:focus {
             });
         });
     </script>
+
 </body>
 </html>

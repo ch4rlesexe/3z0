@@ -19,47 +19,6 @@
             }
         }
 
-        /* Navbar & Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .menu-toggle:hover {
-            transform: rotate(90deg);
-        }
-
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background-color: var(--background);
-                padding: 1rem;
-                text-align: center;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                opacity: 0;
-                transform: translateY(-10px);
-                transition: opacity 0.4s ease, transform 0.4s ease;
-            }
-
-            .nav-links.active {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         /* Hero Section Animation */
         .page-header {
             text-align: center;
@@ -91,20 +50,8 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="logo">3Z0</div>
-            <div class="menu-toggle">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/blog.html">Blog</a></li>
-                <li><a href="/about.html" class="active">About</a></li>
-                <li><a href="/contact.html">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+
+    <div id="navbar-container"></div>
 
     <header class="page-header">
         <h1>About Us</h1>
@@ -119,7 +66,7 @@
             <div class="about-text">
                 <h2>Our Story</h2>
                 <p>Once upon a time, in a galaxy not so far away (actually, just on the internet), 3Z0 was born out of a caffeine-fueled brainstorming session and an intense debate over whether pineapple belongs on pizza.</p>
-                <p>Our mission? Honeslty we aren't sure. To share our knowledge and to provide mildly entertaining distractions when you’re supposed to be working. We believe that words have the power to inspire, educate, and, most importantly, make people chuckle awkwardly in public.</p>
+                <p>Our mission? Honestly, we aren't sure. To share our knowledge and provide mildly entertaining distractions when you’re supposed to be working.</p>
                 <p>Our elite squad of writers and creators work tirelessly—powered by coffee, memes, and an occasional existential crisis—to bring you the most engaging, informative, and *mildly unhinged* content on the internet.</p>
                 <p>Welcome to 3Z0, where learning meets laughter, and productivity is *just* an optional side quest.</p>
             </div>
@@ -147,61 +94,41 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>About 3Z0</h4>
-                <p>A modern platform for sharing ideas, knowledge, and experiences.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="/about.html">About</a></li>
-                    <li><a href="/contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Connect</h4>
-                <div class="social-links">
-                    <a href="https://3z0.org" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="https://x.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-tiktok"></i>
-                    </a>
-                    <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-discord"></i>
-                    </a>
-                </div>
-            </div>
-            
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 3Z0. All rights reserved.</p>
-        </div>
-    </footer>
+    <div id="footer-container"></div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const menuToggle = document.querySelector(".menu-toggle");
-            const navLinks = document.querySelector(".nav-links");
+    function loadComponent(containerId, filePath) {
+        fetch(filePath)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById(containerId).innerHTML = html;
+                
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('#navbar-container .nav-links a').forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            })
+            .catch(error => console.error(`Error loading ${filePath}:`, error));
+    }
 
-            menuToggle.addEventListener("click", function () {
-                navLinks.classList.toggle("active");
+        document.addEventListener("DOMContentLoaded", function () {
+            loadComponent('navbar-container', '/styling/navbar.html');
+            loadComponent('footer-container', '/styling/footer.html');
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.addEventListener("click", function (event) {
+                if (event.target.closest(".menu-toggle")) {
+                    const navLinks = document.querySelector(".nav-links");
+                    if (navLinks) navLinks.classList.toggle("active");
+                }
             });
         });
     </script>
+
 </body>
 </html>

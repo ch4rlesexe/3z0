@@ -4,11 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Get form data
         const formData = new FormData(contactForm);
         const data = Object.fromEntries(formData.entries());
 
-        // Simple form validation
         let isValid = true;
         const errors = [];
 
@@ -34,17 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(errors.join('\n'));
             return;
         }
-
-        // Simulate form submission
+//form validation, doesn't fully function but bones are here if you want it
         try {
             const submitBtn = contactForm.querySelector('.submit-btn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Sending...';
 
-            // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 1500));
 
-            // Success message
             alert('Thank you for your message! We will get back to you soon.');
             contactForm.reset();
         } catch (error) {
@@ -57,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Email validation helper
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
