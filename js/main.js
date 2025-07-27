@@ -5,12 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     menuToggle.addEventListener('click', () => {
         navLinks.classList.toggle('active');
+        // No menu-toggle class changes - keep it static
     });
 
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {
         if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
             navLinks.classList.remove('active');
+            // No menu-toggle class changes - keep it static
         }
     });
 

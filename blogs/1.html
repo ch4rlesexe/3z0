@@ -3,9 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
     <title>The Evolution of Web Development - 3Z0</title>
+    <meta name="title" content="The Evolution of Web Development - 3Z0">
+    <meta name="description" content="Explore the fascinating journey of web development from simple HTML pages to modern AI-powered applications. Discover how the web has evolved and what's next.">
+    <meta name="keywords" content="web development evolution, HTML, CSS, JavaScript, React, Angular, Vue.js, AI in web development, modern web">
+    <meta name="author" content="Charlie">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="article:published_time" content="2025-01-14T16:35:00Z">
+    <meta name="article:author" content="Charlie">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://3z0.org/blogs/1">
+    <meta property="og:title" content="The Evolution of Web Development - 3Z0">
+    <meta property="og:description" content="Explore the fascinating journey of web development from simple HTML pages to modern AI-powered applications. Discover how the web has evolved and what's next.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=1200&h=630&fit=crop">
+    <meta property="og:site_name" content="3Z0">
+    <meta property="article:published_time" content="2025-01-14T16:35:00Z">
+    <meta property="article:author" content="Charlie">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://3z0.org/blogs/1">
+    <meta property="twitter:title" content="The Evolution of Web Development - 3Z0">
+    <meta property="twitter:description" content="Explore the fascinating journey of web development from simple HTML pages to modern AI-powered applications. Discover how the web has evolved and what's next.">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=1200&h=630&fit=crop">
+    
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="msapplication-TileColor" content="#2563eb">
+    <link rel="canonical" href="https://3z0.org/blogs/1">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/nobg.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/nobg.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/nobg.png">
+    <link rel="apple-touch-icon" href="/assets/nobg.png">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // Prevent flash by applying theme immediately
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
         /* Hero Image Section */
         .hero-container {
@@ -25,11 +70,12 @@
             max-width: 900px;
             margin: -80px auto 40px; /* Adjusted margin to overlap hero image */
             padding: 20px;
-            background: var(--light-background);
+            background: var(--card-background);
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px var(--shadow-color);
             position: relative;
             z-index: 10;
+            border: 1px solid var(--border-color);
         }
 
         .blog-post-content h1 {
@@ -49,8 +95,9 @@
             border-left: 4px solid var(--primary-color);
             padding: 15px;
             font-style: italic;
-            background: var(--border-color);
+            background: var(--light-background);
             margin: 20px 0;
+            color: var(--text-color);
         }
 
         .post-meta {
@@ -147,6 +194,12 @@
 
     <div id="footer-container"></div>
 
+    <!-- Floating Theme Toggle -->
+    <button class="theme-toggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script src="/js/theme.js"></script>
     <script>
         function loadComponent(containerId, filePath) {
             fetch(filePath)
@@ -176,7 +229,13 @@
             document.body.addEventListener("click", function (event) {
                 if (event.target.closest(".menu-toggle")) {
                     const navLinks = document.querySelector(".nav-links");
-                    if (navLinks) navLinks.classList.toggle("active");
+                    const menuToggle = document.querySelector(".menu-toggle");
+                    if (navLinks) {
+                        navLinks.classList.toggle("active");
+                    }
+                    // if (menuToggle) {
+                    //     menuToggle.classList.toggle("active");
+                    // }
                 }
             });
         });

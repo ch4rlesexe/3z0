@@ -4,21 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Color Theory in UI Design - 3Z0</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/nobg.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/nobg.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/nobg.png">
+    <link rel="apple-touch-icon" href="/assets/nobg.png">
+    
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // Prevent flash by applying theme immediately
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <style>
+        .hero-container {
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+        }
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .blog-post-content {
+            max-width: 900px;
+            margin: -80px auto 40px;
+            padding: 20px;
+            background: var(--card-background);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Hamburger Menu Styles */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            /* No transitions or animations */
+        }
+
+        .menu-toggle:hover {
+            /* No hover effects */
+        }
+
+        .menu-toggle:focus {
+            outline: none;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="logo">3Z0</div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/blog">Blog</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+    <div id="navbar-container"></div>
 
     <div class="hero-container">
         <img src="https://images.unsplash.com/photo-1494314671902-399b18174975" alt="Color Theory in UI Design" class="hero-image">
@@ -53,16 +100,46 @@
         </div>
     </main>
 
-<div id="footer-container"></div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        fetch('/styling/footer.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('footer-container').innerHTML = html;
-            })
-            .catch(error => console.error('Error loading footer:', error));
-    });
-  </script>
+    <div id="footer-container"></div>
+
+    <!-- Floating Theme Toggle -->
+    <button class="theme-toggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script src="/js/theme.js"></script>
+    <script>
+        function loadComponent(containerId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById(containerId).innerHTML = html;
+                })
+                .catch(error => console.error(`Error loading ${filePath}:`, error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadComponent('navbar-container', '/styling/navbar.html');
+            loadComponent('footer-container', '/styling/footer.html');
+        });
+
+        // Toggle menu functionality (executed after navbar loads)
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.addEventListener("click", function (event) {
+                if (event.target.closest(".menu-toggle")) {
+                    const navLinks = document.querySelector(".nav-links");
+                    const menuToggle = document.querySelector(".menu-toggle");
+                    if (navLinks) {
+                        navLinks.classList.toggle("active");
+                    }
+                    // if (menuToggle) {
+                    //     menuToggle.classList.toggle("active");
+                    // }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
+
+

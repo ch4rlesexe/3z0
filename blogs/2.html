@@ -4,8 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimalist Design Principles - 3Z0</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/nobg.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/nobg.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/nobg.png">
+    <link rel="apple-touch-icon" href="/assets/nobg.png">
+    
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // Prevent flash by applying theme immediately
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
         .hero-container {
             width: 100%;
@@ -21,9 +35,10 @@
             max-width: 900px;
             margin: -80px auto 40px;
             padding: 20px;
-            background: var(--light-background);
+            background: var(--card-background);
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px var(--shadow-color);
+            border: 1px solid var(--border-color);
             position: relative;
             z-index: 10;
         }
@@ -82,6 +97,12 @@
     
     <div id="footer-container"></div>
 
+    <!-- Floating Theme Toggle -->
+    <button class="theme-toggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script src="/js/theme.js"></script>
     <script>
         function loadComponent(containerId, filePath) {
             fetch(filePath)
@@ -111,7 +132,13 @@
             document.body.addEventListener("click", function (event) {
                 if (event.target.closest(".menu-toggle")) {
                     const navLinks = document.querySelector(".nav-links");
-                    if (navLinks) navLinks.classList.toggle("active");
+                    const menuToggle = document.querySelector(".menu-toggle");
+                    if (navLinks) {
+                        navLinks.classList.toggle("active");
+                    }
+                    // if (menuToggle) {
+                    //     menuToggle.classList.toggle("active");
+                    // }
                 }
             });
         });
@@ -119,3 +146,4 @@
 
 </body>
 </html>
+

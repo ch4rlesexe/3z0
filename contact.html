@@ -3,9 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - 3Z0</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>Contact Us - 3Z0 | Get in Touch</title>
+    <meta name="title" content="Contact Us - 3Z0 | Get in Touch">
+    <meta name="description" content="Get in touch with the 3Z0 team. We'd love to hear from you about collaborations, feedback, or any questions you might have.">
+    <meta name="keywords" content="contact 3Z0, get in touch, feedback, collaboration, support">
+    <meta name="author" content="3Z0 Team">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://3z0.org/contact">
+    <meta property="og:title" content="Contact Us - 3Z0 | Get in Touch">
+    <meta property="og:description" content="Get in touch with the 3Z0 team. We'd love to hear from you about collaborations, feedback, or any questions you might have.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=630&fit=crop">
+    <meta property="og:site_name" content="3Z0">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://3z0.org/contact">
+    <meta property="twitter:title" content="Contact Us - 3Z0 | Get in Touch">
+    <meta property="twitter:description" content="Get in touch with the 3Z0 team. We'd love to hear from you about collaborations, feedback, or any questions you might have.">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=630&fit=crop">
+    
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="msapplication-TileColor" content="#2563eb">
+    <link rel="canonical" href="https://3z0.org/contact">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/nobg.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/nobg.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/nobg.png">
+    <link rel="apple-touch-icon" href="/assets/nobg.png">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // Prevent flash by applying theme immediately
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
 /* Fade-in Animation */
 @keyframes fadeIn {
@@ -95,11 +136,11 @@ input:focus, textarea:focus {
     display: none;
     font-size: 1.5rem;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    /* No transitions or animations */
 }
 
 .menu-toggle:hover {
-    transform: rotate(90deg);
+    /* No hover effects */
 }
 
 @media (max-width: 768px) {
@@ -190,6 +231,12 @@ input:focus, textarea:focus {
 
   <div id="footer-container"></div>
 
+    <!-- Floating Theme Toggle -->
+    <button class="theme-toggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script src="/js/theme.js"></script>
     <script>
     function loadComponent(containerId, filePath) {
         fetch(filePath)
@@ -219,7 +266,13 @@ input:focus, textarea:focus {
             document.body.addEventListener("click", function (event) {
                 if (event.target.closest(".menu-toggle")) {
                     const navLinks = document.querySelector(".nav-links");
-                    if (navLinks) navLinks.classList.toggle("active");
+                    const menuToggle = document.querySelector(".menu-toggle");
+                    if (navLinks) {
+                        navLinks.classList.toggle("active");
+                    }
+                    // if (menuToggle) {
+                    //     menuToggle.classList.toggle("active");
+                    // }
                 }
             });
         });
