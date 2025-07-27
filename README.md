@@ -25,3 +25,5 @@ This project is ideal for those who want full control over their blog’s design
 ---
 
 Also attached my www.3z0.org.conf if you are using nginx, or if you are using vercel stick with vercel.json
+
+static.3z0.org point to noregister
