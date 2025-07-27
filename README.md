@@ -12,7 +12,6 @@ This is a standalone blog site that provides a minimalistic and modern layout fo
 - The **contact form** was initially functional but was **disabled** since SMTP was not set up.
 
 ## To-Do List
-- **Add meta data** for better SEO and social media previews.
 - **Implement account registration** to allow user authentication.
 - **Enable post reactions** so users can engage with content.
 - **Show dates and authors** on blog post cards.
