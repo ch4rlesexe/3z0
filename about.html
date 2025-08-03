@@ -46,6 +46,18 @@
             const theme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', theme);
         })();
+        
+        // Prevent auth button flash
+        (function() {
+            // Hide auth buttons immediately to prevent flash
+            const authButtons = document.querySelector('.auth-buttons');
+            const userMenu = document.querySelector('.user-menu');
+            const navActions = document.querySelector('.nav-actions');
+            
+            if (authButtons) authButtons.style.display = 'none';
+            if (userMenu) userMenu.style.display = 'none';
+            if (navActions) navActions.classList.add('auth-loading');
+        })();
     </script>
     <style>
         /* General Fade-in Animation */
@@ -91,6 +103,14 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">3Z0</div>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
 
     <div id="navbar-container"></div>
 
@@ -143,6 +163,7 @@
     </button>
 
     <script src="/js/theme.js"></script>
+    <script src="/js/analytics.js"></script>
     <script>
     function loadComponent(containerId, filePath) {
         fetch(filePath)

@@ -46,6 +46,18 @@
             const theme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', theme);
         })();
+        
+        // Prevent auth button flash
+        (function() {
+            // Hide auth buttons immediately to prevent flash
+            const authButtons = document.querySelector('.auth-buttons');
+            const userMenu = document.querySelector('.user-menu');
+            const navActions = document.querySelector('.nav-actions');
+            
+            if (authButtons) authButtons.style.display = 'none';
+            if (userMenu) userMenu.style.display = 'none';
+            if (navActions) navActions.classList.add('auth-loading');
+        })();
     </script>
     <style>
 /* Fade-in Animation */
@@ -174,6 +186,14 @@ input:focus, textarea:focus {
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">3Z0</div>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
 
     <div id="navbar-container"></div>
 
@@ -226,7 +246,7 @@ input:focus, textarea:focus {
     <div class="funny-popup" id="funnyPopup">
         <p>Oops! Looks like our developers were too lazy to code this feature. 😂</p>
         <p>Just email us instead at: <strong>no-reply@3Z0.org</strong></p>
-        <button onclick="closePopup()">Close</button>
+        <button id="closePopupBtn">Close</button>
     </div>
 
   <div id="footer-container"></div>
@@ -237,6 +257,8 @@ input:focus, textarea:focus {
     </button>
 
     <script src="/js/theme.js"></script>
+    <script src="/js/contact.js"></script>
+    <script src="/js/analytics.js"></script>
     <script>
     function loadComponent(containerId, filePath) {
         fetch(filePath)
@@ -298,6 +320,11 @@ input:focus, textarea:focus {
                 showPopup();
                 element.blur();
             });
+        });
+
+        // Add event listener for close popup button
+        document.getElementById("closePopupBtn").addEventListener("click", function() {
+            closePopup();
         });
     </script>
 

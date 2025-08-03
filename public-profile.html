@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - 3Z0 Blog</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="View user profiles and leave messages on their wall">
+    <meta name="keywords" content="user profile, wall messages, social, community">
+    <meta name="author" content="3Z0 Blog">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://3z0.org/user">
+    <meta property="og:title" content="User Profile - 3Z0 Blog">
+    <meta property="og:description" content="View user profiles and leave messages on their wall">
+    <meta property="og:image" content="https://3z0.org/assets/nobg.png">
+    <meta property="og:site_name" content="3Z0 Blog">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://3z0.org/user">
+    <meta name="twitter:title" content="User Profile - 3Z0 Blog">
+    <meta name="twitter:description" content="View user profiles and leave messages on their wall">
+    <meta name="twitter:image" content="https://3z0.org/assets/nobg.png">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://3z0.org/user">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/nobg.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/nobg.png">
+    <link rel="apple-touch-icon" href="/assets/nobg.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/user-profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Prevent flash -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="navbar-container"></div>
+    
+    <!-- Main Content -->
+    <main class="user-profile-container">
+        <div class="profile-header">
+            <div class="profile-cover" id="profileBanner">
+                <div class="banner-overlay"></div>
+                <div class="profile-avatar-container">
+                    <div class="profile-avatar" id="profileAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-info">
+                <div class="profile-details">
+                    <h1 id="displayName">Loading...</h1>
+                    <p class="username" id="username">@loading</p>
+                    <p class="bio" id="bio">Loading bio...</p>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="postsCount">0</span>
+                        <span class="stat-label">Posts</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="wallMessagesCount">0</span>
+                        <span class="stat-label">Wall Messages</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Member since</span>
+                        <span class="stat-date" id="memberSince">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-content">
+            <div class="profile-main">
+                <!-- Social Links -->
+                <div class="profile-section">
+                    <h3>Social Links</h3>
+                    <div class="social-links" id="socialLinks">
+                        <p>No social links added yet.</p>
+                    </div>
+                </div>
+                
+                <!-- Recent Posts -->
+                <div class="profile-section">
+                    <h3>Recent Posts</h3>
+                    <div class="recent-posts" id="recentPosts">
+                        <p>Loading posts...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-sidebar">
+                <!-- Wall Section -->
+                <div class="profile-section">
+                    <h3>Wall</h3>
+                    <div class="wall-section">
+                        <div class="write-message" id="writeMessage" style="display: none;">
+                            <form class="message-form" id="messageForm">
+                                <textarea 
+                                    id="messageText" 
+                                    placeholder="Write a message on this wall..." 
+                                    maxlength="500"
+                                    rows="3"
+                                ></textarea>
+                                <div class="message-actions">
+                                    <span class="char-count" id="charCount">0/500</span>
+                                    <button type="submit" class="btn btn-primary">Post Message</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="wall-messages" id="wallMessages">
+                            <p>Loading messages...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <div id="footer-container"></div>
+    
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    
+    <!-- Scripts -->
+    <script src="/js/theme.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/user-profile.js"></script>
+    
+    <script>
+        // Load navbar and footer
+        fetch('/styling/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                // Re-initialize main.js after navbar loads
+                if (typeof setupUserMenu === 'function') {
+                    setupUserMenu();
+                }
+                if (typeof updateAuthButtonsVisibility === 'function') {
+                    updateAuthButtonsVisibility();
+                }
+                if (localStorage.getItem('authToken') && typeof loadUserData === 'function') {
+                    loadUserData();
+                }
+            });
+            
+        fetch('/styling/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - 3Z0 Blog</title>
+    
+    <!-- Immediate authentication check - block non-admin users instantly -->
+    <script>
+        (function() {
+            // Check for auth token immediately
+            const token = localStorage.getItem('authToken') || 
+                          document.cookie.split('; ').find(row => row.startsWith('authToken='))?.split('=')[1];
+            
+            if (!token) {
+                window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+                return;
+            }
+            
+            // Verify admin status immediately
+            fetch('/api/admin/check-admin', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Not admin');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.isAdmin) {
+                    window.location.href = '/?error=unauthorized';
+                }
+                // If we get here, user is admin - allow page to load
+            })
+            .catch(error => {
+                console.error('Admin check failed:', error);
+                window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+            });
+        })();
+    </script>
+    
+    <!-- Prevent any content from showing during auth check -->
+    <style>
+        .admin-container { 
+            opacity: 0; 
+            transition: opacity 0.3s ease;
+        }
+        .admin-authorized .admin-container { 
+            opacity: 1; 
+        }
+    </style>
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/admin/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Loading screen for admin users -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">3Z0 Admin</div>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Admin Panel...</div>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <!-- Admin content here -->
+        <div class="admin-header">
+            <h1>Admin Panel</h1>
+            <div class="admin-nav">
+                <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+                <button class="nav-btn" data-page="posts">Posts</button>
+                <button class="nav-btn" data-page="users">Users</button>
+                <button class="nav-btn" data-page="comments">Comments</button>
+                <button class="nav-btn" data-page="analytics">Analytics</button>
+                <button class="nav-btn" data-page="roles">Roles</button>
+            </div>
+            <div class="admin-user">
+                <span id="adminUserName">Admin</span>
+                <button class="btn btn-outline" onclick="adminPanel.logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div class="page-content" id="dashboardPage">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalUsers">-</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalPosts">-</div>
+                        <div class="stat-label">Total Posts</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-comments"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalComments">-</div>
+                        <div class="stat-label">Total Comments</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-eye"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalViews">-</div>
+                        <div class="stat-label">Total Views</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivity" class="activity-list">
+                        <!-- Recent activity will be loaded here -->
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Recent Posts</h3>
+                    <div id="recentPosts" class="recent-list">
+                        <!-- Recent posts will be loaded here -->
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Recent Users</h3>
+                    <div id="recentUsers" class="recent-list">
+                        <!-- Recent users will be loaded here -->
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Recent Comments</h3>
+                    <div id="recentComments" class="recent-list">
+                        <!-- Recent comments will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other pages will be loaded dynamically -->
+        <div class="page-content" id="postsPage" style="display: none;">
+            <!-- Posts management content -->
+        </div>
+        <div class="page-content" id="usersPage" style="display: none;">
+            <!-- Users management content -->
+        </div>
+        <div class="page-content" id="commentsPage" style="display: none;">
+            <!-- Comments management content -->
+        </div>
+        <div class="page-content" id="analyticsPage" style="display: none;">
+            <!-- Analytics content -->
+        </div>
+        <div class="page-content" id="rolesPage" style="display: none;">
+            <!-- Roles management content -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Show admin content only after authentication is confirmed
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add a small delay to ensure auth check is complete
+            setTimeout(() => {
+                document.body.classList.add('admin-authorized');
+            }, 100);
+        });
+    </script>
+    
+    <script src="/js/auth.js"></script>
+    <script src="/admin/admin.js"></script>
+</body>
+</html> 

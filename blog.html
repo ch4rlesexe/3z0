@@ -83,6 +83,18 @@
             const theme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', theme);
         })();
+        
+        // Prevent auth button flash
+        (function() {
+            // Hide auth buttons immediately to prevent flash
+            const authButtons = document.querySelector('.auth-buttons');
+            const userMenu = document.querySelector('.user-menu');
+            const navActions = document.querySelector('.nav-actions');
+            
+            if (authButtons) authButtons.style.display = 'none';
+            if (userMenu) userMenu.style.display = 'none';
+            if (navActions) navActions.classList.add('auth-loading');
+        })();
     </script>
     <style>
 /* Navbar & Hamburger Menu */
@@ -236,6 +248,14 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">3Z0</div>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
 
     <div id="navbar-container"></div>
 
@@ -267,6 +287,8 @@
     </button>
 
     <script src="/js/theme.js"></script>
+    <script src="/js/analytics.js"></script>
+    <script src="/js/auth.js"></script>
     <script>
     function loadComponent(containerId, filePath) {
         fetch(filePath)
@@ -306,12 +328,37 @@
             });
         });
 
-        // Blog Posts Data
-        const blogPosts = [
-            { id: 1, title: 'The Future of Web Development', category: 'Technology', image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643', excerpt: 'Exploring the latest trends and technologies shaping the web.', url: '/blogs/1' },
-            { id: 2, title: 'Minimalist Design Principles', category: 'Design', image: 'https://images.unsplash.com/photo-1516542076529-1ea3854896f2', excerpt: 'Understanding the core principles of minimalist design.', url: '/blogs/2' },
-            { id: 7, title: 'Positivity Gambling', category: 'Finance', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpC1Fqff_cR1Gc9k9Sdqf024cYoD-H6LufLg&s', excerpt: 'Play more, win big.', url: '/blogs/7' }
-        ];
+        // Blog Posts Data - Fetch from API
+        let blogPosts = [];
+
+        // Function to fetch blog posts from API
+        async function fetchBlogPosts() {
+            try {
+                const response = await fetch('/api/posts');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    blogPosts = data.posts.map(post => ({
+                        id: post.id,
+                        title: post.title,
+                        category: post.category,
+                        image: post.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643',
+                        excerpt: post.excerpt || 'No excerpt available.',
+                        url: `/blogs/${post.id}`,
+                        date: post.created_at
+                    }));
+                    
+                    // Display posts after fetching
+                    displayPosts('all');
+                } else {
+                    console.error('Failed to fetch posts:', data.message);
+                    blogGrid.innerHTML = '<p style="text-align: center; font-size: 1.2rem; color: var(--light-text);">Failed to load posts.</p>';
+                }
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                blogGrid.innerHTML = '<p style="text-align: center; font-size: 1.2rem; color: var(--light-text);">Error loading posts.</p>';
+            }
+        }
 
         const blogGrid = document.querySelector('.blog-grid');
         const filterButtons = document.querySelectorAll('.filter-btn');
@@ -337,6 +384,9 @@
                         <span class="category">${post.category}</span>
                         <h3 class="post-title">${post.title}</h3>
                         <p>${post.excerpt}</p>
+                        <div class="post-meta">
+                            <span class="date">${new Date(post.date).toLocaleDateString()}</span>
+                        </div>
                         <a href="${post.url}" class="read-more">Read More</a>
                     </div>
                 `;
@@ -346,9 +396,10 @@
             });
         }
 
-        // Load all posts when the page loads
+        // Load posts when the page loads
         document.addEventListener('DOMContentLoaded', () => {
-            displayPosts('all');
+            // Fetch posts from API
+            fetchBlogPosts();
 
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {

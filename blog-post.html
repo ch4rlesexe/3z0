@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>Blog Post - 3Z0</title>
+    <meta name="description" content="Read our latest articles on technology, design, and innovation.">
+    <meta name="keywords" content="blog, technology, design, innovation">
+    <meta name="author" content="3Z0 Team">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/nobg.png">
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script>
+        // Prevent flash by applying theme immediately
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="blog-post-container">
+                <div class="blog-post-header">
+                    <nav class="breadcrumb">
+                        <a href="/">Home</a> / 
+                        <a href="/blog">Blog</a> / 
+                        <span id="post-title-breadcrumb">Post</span>
+                    </nav>
+                </div>
+                
+                <article class="blog-post" id="blog-post-content">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading post...</p>
+                    </div>
+                </article>
+                
+                <div class="blog-post-footer">
+                    <a href="/blog" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Back to Blog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <script src="/js/theme.js"></script>
+    <script src="/js/analytics.js"></script>
+    <script src="/js/auth.js"></script>
+    <script>
+    function loadComponent(containerId, filePath) {
+        fetch(filePath)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById(containerId).innerHTML = html;
+                
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('#navbar-container .nav-links a').forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            })
+            .catch(error => console.error(`Error loading ${filePath}:`, error));
+    }
+
+    // Function to load blog post content
+    async function loadBlogPost() {
+        const postId = window.location.pathname.split('/').pop();
+        const contentContainer = document.getElementById('blog-post-content');
+        
+        try {
+            const response = await fetch(`/api/posts/id/${postId}`);
+            const post = await response.json();
+            
+            if (response.ok) {
+                // Update page title and meta
+                document.title = `${post.title} - 3Z0 Blog`;
+                document.getElementById('post-title-breadcrumb').textContent = post.title;
+                
+                // Render post content
+                contentContainer.innerHTML = `
+                    <header class="post-header">
+                        <div class="post-meta">
+                            <span class="category">${post.category}</span>
+                            <span class="date">${new Date(post.created_at).toLocaleDateString()}</span>
+                            <span class="author">By ${post.author_username || 'Admin'}</span>
+                        </div>
+                        <h1 class="post-title">${post.title}</h1>
+                        ${post.excerpt ? `<p class="post-excerpt">${post.excerpt}</p>` : ''}
+                    </header>
+                    
+                    ${post.image_url ? `
+                        <div class="post-image">
+                            <img src="${post.image_url}" alt="${post.title}" />
+                        </div>
+                    ` : ''}
+                    
+                    <div class="post-content">
+                        ${post.content}
+                    </div>
+                    
+                    ${post.tags ? `
+                        <div class="post-tags">
+                            <h4>Tags:</h4>
+                            <div class="tags">
+                                ${post.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+            } else {
+                contentContainer.innerHTML = `
+                    <div class="error-message">
+                        <h2>Post Not Found</h2>
+                        <p>The post you're looking for doesn't exist or has been removed.</p>
+                        <a href="/blog" class="btn btn-primary">Back to Blog</a>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading post:', error);
+            contentContainer.innerHTML = `
+                <div class="error-message">
+                    <h2>Error Loading Post</h2>
+                    <p>There was an error loading this post. Please try again later.</p>
+                    <a href="/blog" class="btn btn-primary">Back to Blog</a>
+                </div>
+            `;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadComponent('navbar-container', '/styling/navbar.html');
+        loadComponent('footer-container', '/styling/footer.html');
+        loadBlogPost();
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.body.addEventListener("click", function (event) {
+            if (event.target.closest(".menu-toggle")) {
+                const navLinks = document.querySelector(".nav-links");
+                if (navLinks) {
+                    navLinks.classList.toggle("active");
+                }
+            }
+        });
+    });
+    </script>
+</body>
+</html> 

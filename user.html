@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>My Profile - 3Z0</title>
+    <meta name="description" content="View your public profile and wall on 3Z0.">
+    <meta name="keywords" content="profile, wall, user, 3Z0">
+    <meta name="author" content="3Z0 Team">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/nobg.png">
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .profile-loading {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .profile-loaded {
+            opacity: 1;
+        }
+        
+        .error-page {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-color);
+        }
+        
+        .error-page h1 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <script>
+        // Prevent flash by applying theme immediately
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="profile-container profile-loading" id="profileContainer">
+                <!-- Profile Header -->
+                <div class="profile-header-section">
+                    <div class="profile-banner" id="profileBanner">
+                        <div class="banner-overlay"></div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="profile-details">
+                            <h1 id="displayName">User Name</h1>
+                            <p class="username" id="username">@username</p>
+                            <p class="bio" id="userBio">No bio yet</p>
+                            <div class="profile-stats">
+                                <div class="stat">
+                                    <span class="stat-number" id="postsCount">0</span>
+                                    <span class="stat-label">Posts</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number" id="wallMessagesCount">0</span>
+                                    <span class="stat-label">Wall Messages</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number" id="memberSince">-</span>
+                                    <span class="stat-label">Member Since</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-content">
+                    <div class="profile-sidebar">
+                        <!-- Social Links -->
+                        <div class="profile-section">
+                            <h3>Social Links</h3>
+                            <div class="social-links" id="socialLinks">
+                                <div class="no-links">No social links added</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Posts -->
+                        <div class="profile-section">
+                            <h3>Recent Posts</h3>
+                            <div class="recent-posts" id="recentPosts">
+                                <div class="no-posts">No posts yet</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-main">
+                        <!-- Wall Section -->
+                        <div class="wall-section">
+                            <div class="wall-header">
+                                <h2>Wall</h2>
+                                <p>Leave a message on this user's wall</p>
+                            </div>
+                            
+                            <!-- Write Message -->
+                            <div class="write-message" id="writeMessageSection">
+                                <div class="message-form">
+                                    <textarea 
+                                        id="messageText" 
+                                        placeholder="Write a message on this wall..."
+                                        maxlength="500"
+                                    ></textarea>
+                                    <div class="message-actions">
+                                        <span class="char-count" id="charCount">0/500</span>
+                                        <button class="btn btn-primary" id="postMessageBtn">
+                                            <i class="fas fa-paper-plane"></i>
+                                            Post Message
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Wall Messages -->
+                            <div class="wall-messages" id="wallMessages">
+                                <div class="loading">Loading messages...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <script src="/js/theme.js"></script>
+    <script src="/js/analytics.js"></script>
+    <script src="/js/auth.js"></script>
+    <script>
+    function loadComponent(containerId, filePath) {
+        fetch(filePath)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById(containerId).innerHTML = html;
+                
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('#navbar-container .nav-links a').forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            })
+            .catch(error => console.error(`Error loading ${filePath}:`, error));
+    }
+
+    // Profile wall management
+    class ProfileWall {
+        constructor() {
+            this.profileUsername = this.getProfileUsername();
+            this.init();
+        }
+
+        getProfileUsername() {
+            // Extract username from URL: /user/username
+            const pathParts = window.location.pathname.split('/');
+            return pathParts[pathParts.length - 1];
+        }
+
+        async init() {
+            await this.loadProfile();
+            this.setupEventListeners();
+        }
+
+        async loadProfile() {
+            try {
+                console.log('Loading profile for username:', this.profileUsername);
+                const response = await fetch(`/api/users/${this.profileUsername}/profile`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Profile data loaded:', data);
+                    this.populateProfile(data.user);
+                    this.loadWallMessages();
+                    this.loadRecentPosts();
+                } else {
+                    console.error('Failed to load profile');
+                    this.showErrorPage('User not found', 'This user does not exist.');
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                this.showErrorPage('Error', 'Failed to load profile.');
+            }
+        }
+
+        showErrorPage(title, message) {
+            const profileContainer = document.getElementById('profileContainer');
+            if (profileContainer) {
+                profileContainer.innerHTML = `
+                    <div class="error-page">
+                        <h1>${title}</h1>
+                        <p>${message}</p>
+                    </div>
+                `;
+                profileContainer.classList.remove('profile-loading');
+                profileContainer.classList.add('profile-loaded');
+            }
+        }
+
+        populateProfile(user) {
+            // Update page title
+            document.title = `${user.display_name || user.username} - 3Z0`;
+            
+            // Update profile info
+            document.getElementById('displayName').textContent = user.display_name || user.username;
+            document.getElementById('username').textContent = `@${user.username}`;
+            document.getElementById('userBio').textContent = user.bio || 'No bio yet.';
+            
+            // Update stats
+            document.getElementById('postsCount').textContent = user.posts_count || 0;
+            document.getElementById('wallMessagesCount').textContent = user.wall_messages_count || 0;
+            document.getElementById('memberSince').textContent = new Date(user.created_at).toLocaleDateString();
+            
+            // Update images
+            this.updateProfileImage('profileAvatar', user.profile_picture);
+            this.updateBannerImage('profileBanner', user.banner_image);
+            
+            // Update social links
+            this.populateSocialLinks(user.social_links);
+            
+            // Show the profile content
+            const profileContainer = document.getElementById('profileContainer');
+            if (profileContainer) {
+                profileContainer.classList.remove('profile-loading');
+                profileContainer.classList.add('profile-loaded');
+            }
+        }
+
+        updateProfileImage(containerId, imageUrl) {
+            const container = document.getElementById(containerId);
+            if (imageUrl) {
+                container.innerHTML = `<img src="${imageUrl}" alt="Profile Avatar" />`;
+            } else {
+                container.innerHTML = '<i class="fas fa-user"></i>';
+            }
+        }
+
+        updateBannerImage(containerId, imageUrl) {
+            const container = document.getElementById(containerId);
+            if (imageUrl) {
+                container.style.backgroundImage = `url(${imageUrl})`;
+            } else {
+                container.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }
+        }
+
+        populateSocialLinks(socialLinks) {
+            const container = document.getElementById('socialLinks');
+            if (!socialLinks || Object.keys(socialLinks).length === 0) {
+                container.innerHTML = '<p class="no-social">No social links</p>';
+                return;
+            }
+
+            const linksHTML = Object.entries(socialLinks)
+                .filter(([key, value]) => value && value.trim() !== '')
+                .map(([platform, url]) => {
+                    const icons = {
+                        twitter: 'fab fa-twitter',
+                        github: 'fab fa-github',
+                        linkedin: 'fab fa-linkedin',
+                        instagram: 'fab fa-instagram'
+                    };
+                    const icon = icons[platform] || 'fas fa-link';
+                    return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <i class="${icon}"></i>
+                        <span>${platform.charAt(0).toUpperCase() + platform.slice(1)}</span>
+                    </a>`;
+                }).join('');
+
+            container.innerHTML = linksHTML || '<p class="no-social">No social links</p>';
+        }
+
+        async loadWallMessages() {
+            try {
+                const headers = {};
+                if (authManager && authManager.isAuthenticated()) {
+                    headers['Authorization'] = `Bearer ${authManager.getAuthToken()}`;
+                }
+                
+                const response = await fetch(`/api/users/${this.profileUsername}/wall`, { headers });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    this.renderWallMessages(data.messages);
+                } else {
+                    document.getElementById('wallMessages').innerHTML = '<p>Failed to load wall messages</p>';
+                }
+            } catch (error) {
+                console.error('Error loading wall messages:', error);
+                document.getElementById('wallMessages').innerHTML = '<p>Error loading wall messages</p>';
+            }
+        }
+
+        async loadRecentPosts() {
+            try {
+                const headers = {};
+                if (authManager && authManager.isAuthenticated()) {
+                    headers['Authorization'] = `Bearer ${authManager.getAuthToken()}`;
+                }
+                
+                const response = await fetch(`/api/users/${this.profileUsername}/posts`, { headers });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    this.renderRecentPosts(data.posts);
+                } else {
+                    document.getElementById('recentPosts').innerHTML = '<div class="no-posts">Failed to load posts</div>';
+                }
+            } catch (error) {
+                console.error('Error loading recent posts:', error);
+                document.getElementById('recentPosts').innerHTML = '<div class="no-posts">Error loading posts</div>';
+            }
+        }
+
+        renderWallMessages(messages) {
+            const container = document.getElementById('wallMessages');
+            
+            if (!messages || messages.length === 0) {
+                container.innerHTML = '<p class="no-messages">No messages yet. Be the first to leave a message!</p>';
+                return;
+            }
+
+            const messagesHTML = messages.map(message => `
+                <div class="wall-message">
+                    <div class="message-header">
+                        <div class="message-author">
+                            <div class="author-avatar">
+                                ${message.author_avatar ? `<img src="${message.author_avatar}" alt="${message.author_name}" />` : '<i class="fas fa-user"></i>'}
+                            </div>
+                            <div class="author-info">
+                                <span class="author-name">${message.author_name}</span>
+                                <span class="message-date">${new Date(message.created_at).toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-content">
+                        ${message.content}
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = messagesHTML;
+        }
+
+        renderRecentPosts(posts) {
+            const container = document.getElementById('recentPosts');
+            
+            if (!posts || posts.length === 0) {
+                container.innerHTML = '<div class="no-posts">No posts yet</div>';
+                return;
+            }
+
+            const postsHTML = posts.slice(0, 5).map(post => `
+                <div class="recent-post">
+                    <h4><a href="/blogs/${post.id}">${post.title}</a></h4>
+                    <p class="post-date">${new Date(post.created_at).toLocaleDateString()}</p>
+                </div>
+            `).join('');
+
+            container.innerHTML = postsHTML;
+        }
+
+        setupEventListeners() {
+            // Character count for message textarea
+            const messageText = document.getElementById('messageText');
+            const charCount = document.getElementById('charCount');
+            
+            messageText.addEventListener('input', () => {
+                const count = messageText.value.length;
+                charCount.textContent = `${count}/500`;
+                
+                if (count > 450) {
+                    charCount.style.color = '#dc2626';
+                } else if (count > 400) {
+                    charCount.style.color = '#f59e0b';
+                } else {
+                    charCount.style.color = 'var(--light-text)';
+                }
+            });
+
+            // Post message button
+            document.getElementById('postMessageBtn').addEventListener('click', () => {
+                this.postMessage();
+            });
+        }
+
+        async postMessage() {
+            const messageText = document.getElementById('messageText');
+            const content = messageText.value.trim();
+            
+            if (!content) {
+                alert('Please enter a message');
+                return;
+            }
+            
+            // Check if user is authenticated
+            if (!authManager || !authManager.isAuthenticated()) {
+                alert('Please log in to post messages');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/users/${this.profileUsername}/wall`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authManager.getAuthToken()}`
+                    },
+                    body: JSON.stringify({ content })
+                });
+                
+                if (response.ok) {
+                    messageText.value = '';
+                    document.getElementById('charCount').textContent = '0/500';
+                    await this.loadWallMessages();
+                    alert('Message posted successfully!');
+                } else {
+                    const error = await response.json();
+                    alert(error.message || 'Failed to post message');
+                }
+            } catch (error) {
+                console.error('Error posting message:', error);
+                alert('Error posting message');
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadComponent('navbar-container', '/styling/navbar.html');
+        loadComponent('footer-container', '/styling/footer.html');
+        
+        // Initialize ProfileWall immediately - profiles are public
+        new ProfileWall();
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.body.addEventListener("click", function (event) {
+            if (event.target.closest(".menu-toggle")) {
+                const navLinks = document.querySelector(".nav-links");
+                if (navLinks) {
+                    navLinks.classList.toggle("active");
+                }
+            }
+        });
+    });
+    </script>
+</body>
+</html> 
