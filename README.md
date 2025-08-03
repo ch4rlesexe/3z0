@@ -172,10 +172,6 @@ For Gmail, you'll need to:
 The footer includes links to your personal website and social media:
 - Personal Website: `ch4rlesexe.me`
 - GitHub: `github.com/ch4rlesexe`
-- Twitter: `twitter.com/ch4rlesexe`
-- LinkedIn: `linkedin.com/in/ch4rlesexe`
-- Instagram: `instagram.com/ch4rlesexe`
-- YouTube: `youtube.com/@ch4rlesexe`
 
 ### Styling
 - Main styles: `style.css`
